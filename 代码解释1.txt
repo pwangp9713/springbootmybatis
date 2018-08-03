@@ -1,0 +1,14 @@
+﻿用springboot+mybatis模拟学生注册课程后台
+
+Major
+Course
+Student
+Grade
+
+Major-Course 一对多
+Major-Student 一对多
+Course-Student 多对多
+Course-Grade 一对多
+Student-Grade 一对多
+
+
