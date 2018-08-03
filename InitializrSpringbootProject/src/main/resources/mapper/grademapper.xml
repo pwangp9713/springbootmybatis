@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GradeMapper">
+    
+    <select id="selectgradebystudent" resultMap="getallgrade">
+        select * from Grade g inner join Student s on s.sid=g.sid where s.sname=#{sname}
+    </select>
+    <select id="selectgradebycourse" resultMap="getallgrade">
+        select * from Grade g inner join Course c on c.cid=g.cid where c.cname=#{cname}
+    </select>
+    
+        
+    <resultMap type ="com.example.domain.Grade" id = "getallgrade">
+        <id column = "gid" property = "gid"></id>
+        <result column = "g" property = "g"/>
+         
+        <association property = "gstudent" javaType = "com.example.domain.Student">
+            <id column = "sid" property = "sid"/>
+            <result column = "sname" property = "sname"/>
+	 </association>
+         
+         <association property = "gcourse" javaType = "com.example.domain.Course">
+            <id column = "cid" property = "cid"/>
+            <result column = "cname" property = "cname"/>
+	 </association>
+        
+    </resultMap>
+    
+</mapper>

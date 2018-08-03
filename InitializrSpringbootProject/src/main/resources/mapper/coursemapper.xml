@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CourseMapper">
+    <insert id="createcourse" parameterType="Course" useGeneratedKeys="true" keyProperty="cid">
+        insert into Course (cname) values (#{cname})
+    </insert>
+    <update id="setcoursemajor">
+        update Course set mid=#{mid} where cname=#{cname}
+    </update>
+    
+    
+    <select id="selectcoursebyname" resultType="Course">
+        select * from Course where cname = #{cname}
+    </select>
+    
+    
+    <select id="selectcoursebymajor" resultMap="getallcourse">
+        select * from Course c inner join Major m on m.mid=c.mid where m.mname=#{mname}
+    </select>
+    <select id="selectcoursebystudent" resultMap="getallcourse">
+        select * from Course c inner join CS l on c.cid=l.ccid inner join Student s on s.sid=l.csid where s.sname=#{sname}
+    </select>
+    <select id="selectcoursebygrade" resultMap="getallcourse">
+        select * from Course c inner join Grade g on c.cid=g.cid where g.sid=#{sid}
+    </select>
+    
+    <resultMap type ="com.example.domain.Course" id = "getallcourse">
+        <id column = "cid" property = "cid"></id>
+        <result column = "cname" property = "cname"/>
+         
+        <association property = "cmajor" javaType = "com.example.domain.Major">
+            <id column = "mid" property = "mid"/>
+            <result column = "mname" property = "mname"/>
+	 </association>
+        
+         <collection property = "cstudent" ofType = "com.example.domain.Student">
+            <id column = "sid" property = "sid"/>
+            <result column = "sname" property = "sname"/>
+        </collection>
+        
+        <collection property = "cgrade" ofType = "com.example.domain.Grade" resultMap="getgrade1"/>
+    </resultMap>
+    
+    <resultMap type ="com.example.domain.Grade" id = "getgrade1">
+        <id column = "gid" property = "gid"></id>
+        <result column = "g" property = "g"></result>
+        
+        <association property = "gstudent" javaType = "com.example.domain.Student">
+            <id column = "sid" property = "sid"/>
+            <result column = "sname" property = "sname"/>
+	 </association>
+    </resultMap>
+    
+    
+    <select id="selectcourseall" resultMap="getallcourse">
+        select * from Course c inner join Major m on m.mid=c.mid inner join CS l on c.cid=l.ccid inner join Student s on s.sid=l.csid inner join Grade g on s.sid=g.sid and c.cid=g.cid where c.cname=#{cname}
+    </select>
+    
+</mapper>
